@@ -19,7 +19,7 @@ public class AppController extends BaseController {
 
     private void echo(HttpServerExchange exchange) {
         exchange.getRequestHeaders().forEach(h -> {
-                    log.info("Header IN {}: {}", h.getHeaderName(), h.toArray());
+                    log.info("Header {}: {}", h.getHeaderName(), h.toArray());
                     exchange.getResponseHeaders().putAll(new HttpString("IN_" + h.getHeaderName()), h);
                 }
         );
@@ -30,13 +30,10 @@ public class AppController extends BaseController {
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, contentType);
         }
         if (attachment != null) {
-            log.info("body={}\n", new String(attachment));
+            log.info("Body={}\n", new String(attachment));
             exchange.getResponseSender().send(ByteBuffer.wrap(attachment));
         }
-        exchange.getResponseHeaders().forEach(h -> {
-                    log.info("Header OUT {}: {}", h.getHeaderName(), h.toArray());
-                }
-        );
+        //exchange.getResponseHeaders().forEach(h -> { log.info("Header OUT {}: {}", h.getHeaderName(), h.toArray());});
         log.info("Request ENDED");
         exchange.endExchange();
     }
