@@ -1,40 +1,28 @@
 
 package com.fic.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fic.BodyHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
-import io.undertow.util.HttpString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 @Slf4j
 public class AppController extends BaseController {
     @Override
-    protected void handleRequest(String method, String path, HttpServerExchange exchange) throws JsonProcessingException {
-        echo(exchange);
-    }
-
-    private void echo(HttpServerExchange exchange) {
-        exchange.getRequestHeaders().forEach(h -> {
-                    log.info("Header {}: {}", h.getHeaderName(), h.toArray());
-                    exchange.getResponseHeaders().putAll(new HttpString("IN_" + h.getHeaderName()), h);
-                }
-        );
+    protected void handleRequest(String method, String path, HttpServerExchange exchange) {
+        StringBuilder response = new StringBuilder();
+        response.append(method).append(" -> ").append(path).append("\n");
+        exchange.getRequestHeaders().forEach(h -> response.append(h.getHeaderName()).append(": ").append(Arrays.toString(h.toArray())).append("\n"));
         byte[] attachment = (byte[]) exchange.getAttachment(BodyHandler.REQUEST_BODY_BYTES);
-        String contentType = exchange.getRequestHeaders().getFirst(Headers.CONTENT_TYPE);
-        exchange.setStatusCode(200);
-        if (contentType != null) {
-            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, contentType);
-        }
         if (attachment != null) {
-            log.info("Body={}\n", new String(attachment));
-            exchange.getResponseSender().send(ByteBuffer.wrap(attachment));
+            response.append("Body=").append(new String(attachment)).append("\n");
         }
-        //exchange.getResponseHeaders().forEach(h -> { log.info("Header OUT {}: {}", h.getHeaderName(), h.toArray());});
-        log.info("Request ENDED");
+        log.info("Request START\n{}\nRequest END", response.toString());
+        exchange.setStatusCode(200);
+        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+        exchange.getResponseSender().send(response.toString());
         exchange.endExchange();
     }
 
