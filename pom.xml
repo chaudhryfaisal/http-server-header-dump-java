@@ -11,11 +11,12 @@
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.framework>1.6.1</version.framework>
+        <version.framework>1.6.10</version.framework>
         <version.slf4j>1.7.21</version.slf4j>
         <version.logback>1.1.7</version.logback>
-        <version.undertow>2.0.16.Final</version.undertow>
+        <version.undertow>2.0.23.Final</version.undertow>
         <version.lombok>1.18.8</version.lombok>
+        <version.commons-io>2.6</version.commons-io>
         <argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
     </properties>
 
@@ -23,7 +24,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>${version.commons-io}</version>
         </dependency>
         <dependency>
             <groupId>com.networknt</groupId>
@@ -41,11 +42,11 @@
             <artifactId>logback-classic</artifactId>
             <version>${version.logback}</version>
         </dependency>
-        <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-core</artifactId>
-            <version>${version.undertow}</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>io.undertow</groupId>-->
+        <!--<artifactId>undertow-core</artifactId>-->
+        <!--<version>${version.undertow}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -122,6 +123,25 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
                         </configuration>
                     </execution>
                 </executions>

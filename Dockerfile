@@ -1,5 +1,5 @@
 FROM openjdk:8-jre-alpine
-ARG APP_JAR="target/app.jar"
+ARG APP_JAR="target/original-app.jar"
 
 EXPOSE  8080 8443
 

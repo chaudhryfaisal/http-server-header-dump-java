@@ -1,5 +1,5 @@
 ---
 applications:
 - name: http-server-header-dump
-  path: target/http-server-header-dump-java-0.0.1-SNAPSHOT.jar
+  path: target/app.jar
   buildpack: java_buildpack_offline
