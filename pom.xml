@@ -16,7 +16,7 @@
         <version.logback>1.1.7</version.logback>
         <version.undertow>2.0.23.Final</version.undertow>
         <version.lombok>1.18.8</version.lombok>
-        <version.commons-io>2.6</version.commons-io>
+        <version.commons-io>2.7</version.commons-io>
         <argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
     </properties>
 
